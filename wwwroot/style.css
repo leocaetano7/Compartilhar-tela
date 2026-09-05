@@ -1,0 +1,48 @@
+* { box-sizing: border-box; font-family: Arial, sans-serif; }
+body { margin: 0; background: #313338; color: #e3e5e8; }
+
+.tela-login {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100vh; gap: 10px;
+}
+.tela-login input, .tela-login button {
+  padding: 10px; font-size: 16px; border-radius: 6px; border: none;
+}
+.tela-login button { background: #5865f2; color: white; cursor: pointer; }
+.link-botao { background: none !important; color: #949ba4 !important; text-decoration: underline; font-size: 13px; }
+.erro { color: #f23f43; font-size: 13px; }
+
+.tela-app { display: flex; height: 100vh; }
+
+.barra-canais { width: 220px; background: #2b2d31; padding: 10px; display: flex; flex-direction: column; }
+.barra-canais ul { list-style: none; padding: 0; }
+.barra-canais li { padding: 8px; border-radius: 4px; cursor: pointer; }
+.barra-canais li:hover { background: #3a3d42; }
+.barra-canais button { margin-top: 8px; padding: 8px; border-radius: 6px; border: none; background: #3a3d42; color: white; cursor: pointer; }
+
+.area-chat { flex: 1; display: flex; flex-direction: column; }
+.topo-chat {
+  padding: 12px; border-bottom: 1px solid #1e1f22; display: flex; justify-content: space-between; align-items: center;
+}
+.controles-chamada { display: flex; gap: 6px; }
+.controles-chamada button { background: #4e5058; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
+
+.mensagens { flex: 1; padding: 10px; overflow-y: auto; }
+.mensagens .msg { margin-bottom: 8px; }
+.mensagens .msg b { color: #5865f2; }
+.mensagens .sistema { color: #949ba4; font-style: italic; font-size: 13px; }
+
+.area-video { display: flex; gap: 10px; padding: 10px; background: #1e1f22; flex-wrap: wrap; }
+.area-video video { width: 220px; border-radius: 8px; background: black; margin-right: 8px; }
+
+.enviar-mensagem { display: flex; padding: 10px; gap: 8px; }
+.enviar-mensagem input { flex: 1; padding: 10px; border-radius: 6px; border: none; }
+.enviar-mensagem button { padding: 10px 16px; border-radius: 6px; border: none; background: #5865f2; color: white; cursor: pointer; }
+
+.modal {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center;
+}
+.modal-conteudo { background: #2b2d31; padding: 24px; border-radius: 8px; text-align: center; }
+.modal-conteudo input { padding: 8px; width: 200px; margin: 10px 0; text-align: center; }
+.modal-conteudo button { padding: 8px 16px; border-radius: 6px; border: none; background: #5865f2; color: white; cursor: pointer; }

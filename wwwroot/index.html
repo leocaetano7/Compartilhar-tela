@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Discord Clone - Projeto Faculdade (C#)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="telaLogin" class="tela-login">
+    <h1 id="tituloLogin">Entrar</h1>
+    <input id="inputUsuario" type="text" placeholder="Usuário" />
+    <input id="inputSenha" type="password" placeholder="Senha" />
+    <button id="btnEntrar">Entrar</button>
+    <button id="btnCadastrar" class="link-botao">Não tenho conta - Cadastrar</button>
+    <p id="erroLogin" class="erro"></p>
+  </div>
+
+  <div id="telaApp" class="tela-app" style="display: none;">
+
+    <div class="barra-canais">
+      <h3>Seus canais</h3>
+      <ul id="listaCanais"></ul>
+      <button id="btnCriarCanal">+ Criar canal</button>
+      <button id="btnEntrarCanal">Entrar com código</button>
+    </div>
+
+    <div class="area-chat">
+      <div class="topo-chat">
+        <span id="nomeCanalAtual">Escolha ou crie um canal</span>
+        <div class="controles-chamada">
+          <button id="btnChamada">📞 Entrar na chamada</button>
+          <button id="btnMutar" style="display:none;">🎤 Mutar</button>
+          <button id="btnCamera" style="display:none;">📷 Ligar câmera</button>
+          <button id="btnCompartilharTela" style="display:none;">🖥️ Compartilhar tela</button>
+        </div>
+      </div>
+
+      <div class="area-video" id="areaVideo" style="display: none;"></div>
+
+      <div id="mensagens" class="mensagens"></div>
+
+      <div class="enviar-mensagem">
+        <input id="inputMensagem" type="text" placeholder="Enviar mensagem..." />
+        <button id="btnEnviar">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalConvite" class="modal" style="display:none;">
+    <div class="modal-conteudo">
+      <h3>Canal criado!</h3>
+      <p>Envie este código para seus amigos entrarem:</p>
+      <input id="codigoConvite" readonly />
+      <button id="btnFecharModal">Fechar</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@8.0.0/dist/browser/signalr.min.js"></script>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>
