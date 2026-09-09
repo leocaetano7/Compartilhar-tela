@@ -1,4 +1,4 @@
-# Discord Clone - Projeto de Faculdade (versão C#)
+# Nemesis call (versão C#)
 
 **Autor:** leocaetano7
 
