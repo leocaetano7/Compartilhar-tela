@@ -104,5 +104,5 @@ public class ChatHub : Hub
 
         await Clients.Group(grupo).SendAsync("participantesChamada", nomes);
     }
-    
+}
     
