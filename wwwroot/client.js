@@ -1,5 +1,4 @@
-// client.js
-// Igual antes, só que agora fala com o servidor C# via SignalR em vez de Socket.io.
+
 
 const conexao = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
 conexao.start().catch((erro) => console.error("Erro ao conectar no SignalR:", erro));
@@ -204,6 +203,12 @@ async function iniciarChamada() {
     chamadasAtivas.push(chamada);
   });
 }
+
+conexao.on("participantesChamada", (nomes) => {
+  const texto = nomes.length > 0 ? "Na chamada: " + nomes.join(", ") : "";
+  document.getElementById("listaParticipantesChamada").textContent = texto;
+});
+
 
 function mostrarVideo(stream, nome, idElemento) {
   let video = document.getElementById("video-" + idElemento);

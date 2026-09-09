@@ -1,20 +1,20 @@
 using DiscordClone.Data;
 using Microsoft.AspNetCore.SignalR;
 using Npgsql;
+using System.Collections.Concurrent;
 
 namespace DiscordClone.Hubs;
 
-// Isso é o equivalente ao "io.on('connection', ...)" que tínhamos no Node.js.
 public class ChatHub : Hub
 {
     private readonly Db _db;
 
+    private static readonly ConcurrentDictionary<int, List<(string ConnectionId, string Usuario)>> ParticipantesChamada = new();
     public ChatHub(Db db)
     {
         _db = db;
     }
 
-    // Descobre quem é o usuário logado a partir do cookie da conexão
     private async Task<string> PegarNomeUsuario()
     {
         var contextoHttp = Context.GetHttpContext();
@@ -61,10 +61,48 @@ public class ChatHub : Hub
         var nome = await PegarNomeUsuario();
         var grupo = "canal-" + canalId;
 
+        var lista = ParticipantesChamada.GetOrAdd(canalId, _ => new List<(string, string)>());
+        lock (lista)
+        {
+            lista.Add((Context.ConnectionId, nome));
+        }
+
         await Clients.OthersInGroup(grupo).SendAsync("novoParticipanteChamada", new
         {
             peerId,
             usuario = nome,
         });
+
+        await AtualizarListaDeParticipantes(canalId);
     }
-}
+    
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        foreach (var canalId in ParticipantesChamada.Keys.ToList())
+        {
+            var lista = ParticipantesChamada[canalId];
+            lock (lista)
+            {
+                lista.RemoveAll(p => p.ConnectionId == Context.ConnectionId);
+            }
+            await AtualizarListaDeParticipantes(canalId);
+        }
+
+        await base.OnDisconnectedAsync(exception);
+    }
+
+    private async Task AtualizarListaDeParticipantes(int canalId)
+    {
+        var grupo = "canal-" + canalId;
+        var lista = ParticipantesChamada.GetOrAdd(canalId, _ => new List<(string, string)>());
+
+        List<string> nomes;
+        lock (lista)
+        {
+            nomes = lista.Select(p => p.Usuario).ToList();
+        }
+
+        await Clients.Group(grupo).SendAsync("participantesChamada", nomes);
+    }
+    
+    

@@ -12,8 +12,6 @@ var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
     ?? builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new Exception("Configure a variável DATABASE_URL");
 
-// O Supabase manda a URL no formato postgresql://usuario:senha@host:porta/banco
-// e o Npgsql entende melhor no formato "Host=...;Port=...". Convertendo aqui:
 var connectionStringNpgsql = ConverterUrlParaNpgsql(connectionString);
 
 var db = new Db(connectionStringNpgsql);
@@ -22,13 +20,10 @@ builder.Services.AddSingleton(db);
 var app = builder.Build();
 
 await db.CriarTabelasAsync();
+await db.SemearCanaisAsync();
 
-app.UseDefaultFiles();
+app.UseDefaultFiles();  
 app.UseStaticFiles();
-
-// ---------- "SESSÃO" SIMPLES USANDO UM TOKEN GUARDADO NO BANCO ----------
-// Em vez de usar sessão em memória (que se perde quando o servidor reinicia),
-// guardamos um token aleatório no banco, e um cookie no navegador com esse token.
 
 async Task<(int Id, string Username)?> PegarUsuarioLogado(HttpContext contexto, Db db)
 {
@@ -167,12 +162,9 @@ app.MapGet("/api/canais", async (HttpContext contexto, Db db) =>
     await using var conexao = db.CriarConexao();
     await conexao.OpenAsync();
     await using var comando = new NpgsqlCommand(@"
-        SELECT discord_channels.id, discord_channels.name, discord_channels.invite_code
+        SELECT id, name, invite_code
         FROM discord_channels
-        JOIN discord_channel_members ON discord_channel_members.channel_id = discord_channels.id
-        WHERE discord_channel_members.user_id = $1
-        ORDER BY discord_channels.created_at", conexao);
-    comando.Parameters.AddWithValue(usuario.Value.Id);
+        ORDER BY id", conexao);
 
     var canais = new List<object>();
     await using var leitor = await comando.ExecuteReaderAsync();
@@ -258,7 +250,6 @@ app.MapHub<ChatHub>("/chathub");
 
 app.Run();
 
-// Converte a URL estilo "postgresql://usuario:senha@host:porta/banco" pro formato do Npgsql
 static string ConverterUrlParaNpgsql(string url)
 {
     var uri = new Uri(url);

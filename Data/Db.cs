@@ -2,7 +2,6 @@ using Npgsql;
 
 namespace DiscordClone.Data;
 
-// Esta classe cuida da conexão com o banco e garante que as tabelas existem.
 public class Db
 {
     private readonly string _connectionString;
@@ -46,8 +45,7 @@ public class Db
                 PRIMARY KEY (channel_id, user_id)
             );");
 
-        // Guarda as sessões de login no banco, pra não perder quando o servidor reiniciar
-        // (o mesmo problema que resolvemos na versão Node.js, resolvido aqui do mesmo jeito).
+
         await ExecutarAsync(conexao, @"
             CREATE TABLE IF NOT EXISTS discord_sessions (
                 token TEXT PRIMARY KEY,
@@ -56,6 +54,31 @@ public class Db
             );");
 
         Console.WriteLine("Tabelas do banco de dados prontas.");
+    }
+
+
+    public async Task SemearCanaisAsync()
+    {
+        await using var conexao = CriarConexao();
+        await conexao.OpenAsync();
+
+        await using var contagem = new NpgsqlCommand("SELECT COUNT(*) FROM discord_channels", conexao);
+        var total = (long)(await contagem.ExecuteScalarAsync())!;
+        if (total > 0) return; 
+
+        var nomes = new[] { "Geral", "Estudos", "Memes", "Jogos", "Música", "Trabalhos", "Dúvidas", "Filmes", "Off-topic", "Anúncios" };
+
+        foreach (var nome in nomes)
+        {
+            var codigo = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(4)).ToLower();
+            await using var insere = new NpgsqlCommand(
+                "INSERT INTO discord_channels (name, invite_code) VALUES ($1, $2)", conexao);
+            insere.Parameters.AddWithValue(nome);
+            insere.Parameters.AddWithValue(codigo);
+            await insere.ExecuteNonQueryAsync();
+        }
+
+        Console.WriteLine("10 canais padrão criados.");
     }
 
     private static async Task ExecutarAsync(NpgsqlConnection conexao, string sql)
