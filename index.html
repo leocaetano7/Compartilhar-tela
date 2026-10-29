@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nemesis call</title>
+  <meta name="description" content="Chamada de vídeo e compartilhamento de tela direto no navegador, sem instalar nada." />
+  <meta property="og:title" content="Nemesis call" />
+  <meta property="og:description" content="Entre na chamada e compartilhe sua tela direto no navegador." />
+  <meta name="theme-color" content="#2b2d31" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>" />
+  <link rel="preconnect" href="https://8x8.vc" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="tela-app">
+
+    <aside class="barra-canais">
+      <h3>Canais de voz</h3>
+      <ul id="listaCanais" class="lista-canais"></ul>
+
+      <div class="acoes">
+        <button id="btnCriarSala" class="btn-principal">+ Criar sala</button>
+        <button id="btnEntrarCodigo">Entrar com código</button>
+      </div>
+
+      <div class="perfil">
+        <label for="inputNome">Seu nome</label>
+        <input id="inputNome" type="text" maxlength="40" placeholder="Como quer ser chamado?" autocomplete="nickname" />
+      </div>
+    </aside>
+
+    <main class="area-chamada">
+      <header class="topo-chamada">
+        <span id="nomeSalaAtual" class="nome-sala">Escolha um canal</span>
+        <span id="listaParticipantes" class="participantes"></span>
+        <div class="controles">
+          <button id="btnCompartilharTela" hidden>🖥️ Compartilhar tela</button>
+          <button id="btnCopiarLink" hidden>🔗 Copiar convite</button>
+          <button id="btnSair" class="perigo" hidden>Sair</button>
+        </div>
+      </header>
+
+      <div id="boasVindas" class="boas-vindas">
+        <h1>Nemesis call</h1>
+        <p>Escolha um canal ao lado ou crie uma sala nova para chamar seus amigos e compartilhar a tela.</p>
+        <p class="dica">Não precisa instalar nada nem criar conta.</p>
+      </div>
+
+      <div id="meet" class="meet" hidden></div>
+    </main>
+  </div>
+
+  <dialog id="dialogoCodigo" class="modal">
+    <form method="dialog">
+      <h3>Entrar em uma sala</h3>
+      <p>Cole o link ou o código que seu amigo te mandou:</p>
+      <input id="inputCodigo" type="text" required autocomplete="off" />
+      <div class="modal-botoes">
+        <button id="btnCancelarCodigo" type="button">Cancelar</button>
+        <button value="entrar" class="btn-principal">Entrar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+  <script src="client.js" defer></script>
+</body>
+</html>

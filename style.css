@@ -1,0 +1,145 @@
+:root {
+  --fundo: #313338;
+  --fundo-escuro: #1e1f22;
+  --barra: #2b2d31;
+  --hover: #3a3d42;
+  --hover-leve: rgba(78, 80, 88, .3);
+  --icone: #80848e;
+  --botao: #4e5058;
+  --texto: #e3e5e8;
+  --texto-suave: #949ba4;
+  --destaque: #5865f2;
+  --perigo: #da373c;
+  --sucesso: #23a55a;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--fundo); color: var(--texto);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+[hidden] { display: none !important; }
+
+button {
+  font: inherit; font-size: 14px; color: white; background: var(--botao);
+  border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer;
+}
+button:hover { filter: brightness(1.15); }
+input {
+  font: inherit; font-size: 14px; color: var(--texto); background: var(--fundo-escuro);
+  border: none; border-radius: 6px; padding: 9px 10px; width: 100%;
+}
+button:focus-visible, input:focus-visible { outline: 2px solid var(--destaque); outline-offset: 2px; }
+.btn-principal { background: var(--destaque); }
+.perigo { background: var(--perigo); }
+
+.tela-app { display: flex; height: 100vh; height: 100dvh; }
+
+/* ---------- Barra lateral ---------- */
+.barra-canais {
+  width: 230px; flex-shrink: 0; background: var(--barra); padding: 12px;
+  display: flex; flex-direction: column; gap: 10px; overflow-y: auto;
+}
+.barra-canais h3 {
+  margin: 4px 4px 0; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--texto-suave);
+}
+.lista-canais { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+
+.icone { width: 18px; height: 18px; flex-shrink: 0; }
+.canal-botao {
+  width: 100%; display: flex; align-items: center; gap: 6px; padding: 6px 8px;
+  background: none; color: var(--texto-suave); font-size: 15px; font-weight: 500; text-align: left;
+}
+.canal-botao:hover, .membro:hover { background: var(--hover-leve); color: var(--texto); filter: none; }
+.icone-voz { width: 20px; height: 20px; color: var(--icone); }
+.canal-nome { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.canal.ativo .canal-botao { color: white; font-weight: 600; }
+.canal.ativo .icone-voz { color: var(--sucesso); }
+.canal-tempo { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--sucesso); }
+
+/* Pessoas dentro do canal */
+.canal-membros { list-style: none; margin: 2px 0 6px; padding: 0 0 0 26px; display: flex; flex-direction: column; gap: 2px; }
+.membro {
+  display: flex; align-items: center; gap: 8px; min-height: 32px; padding: 4px 8px;
+  border-radius: 6px; font-size: 14px; color: var(--texto-suave);
+}
+.membro-nome { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.conectando { font-style: italic; }
+.avatar {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  display: grid; place-items: center; font-size: 10px; font-weight: 700; color: white;
+}
+.ao-vivo {
+  flex-shrink: 0; padding: 1px 5px; border-radius: 8px;
+  background: var(--perigo); color: white; font-size: 10px; font-weight: 700; letter-spacing: .02em;
+}
+.icone-mutado { width: 16px; height: 16px; margin-left: auto; }
+.convidar { width: 100%; background: none; text-align: left; }
+.convidar .icone-seta { width: 16px; height: 16px; margin-left: auto; }
+
+.acoes { display: flex; flex-direction: column; gap: 6px; }
+.perfil { margin-top: auto; display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--texto-suave); }
+
+/* ---------- Área da chamada ---------- */
+.area-chamada { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.topo-chamada {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 10px 12px; border-bottom: 1px solid var(--fundo-escuro);
+}
+.nome-sala { font-weight: 600; }
+/* No computador quem está na chamada aparece na lista de canais; no celular, aqui */
+.participantes { display: none; }
+.controles { display: flex; gap: 6px; margin-left: auto; }
+#btnCompartilharTela.ativo { background: var(--sucesso); }
+
+.meet { flex: 1; min-height: 0; position: relative; background: var(--fundo-escuro); }
+.meet iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+.boas-vindas {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 24px; text-align: center; color: var(--texto-suave);
+}
+.boas-vindas h1 { margin: 0 0 8px; color: var(--texto); }
+.boas-vindas p { margin: 4px 0; max-width: 420px; }
+.boas-vindas .dica { font-size: 13px; }
+
+/* ---------- Modal "Entrar com código" ---------- */
+.modal {
+  width: min(360px, calc(100% - 32px)); padding: 24px; border: none; border-radius: 8px;
+  background: var(--barra); color: var(--texto);
+}
+.modal::backdrop { background: rgba(0, 0, 0, .6); }
+.modal h3 { margin: 0 0 8px; }
+.modal p { margin: 0 0 12px; font-size: 14px; color: var(--texto-suave); }
+.modal-botoes { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+
+/* ---------- Aviso (toast) ---------- */
+.aviso {
+  position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px);
+  max-width: calc(100% - 32px); padding: 10px 16px; border-radius: 8px;
+  background: var(--fundo-escuro); color: var(--texto); box-shadow: 0 4px 16px rgba(0, 0, 0, .4);
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+}
+.aviso.visivel { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- Celular ---------- */
+@media (max-width: 700px) {
+  .tela-app { flex-direction: column; }
+  .barra-canais { width: auto; padding: 8px; gap: 8px; overflow: visible; }
+  .barra-canais h3, .perfil label { display: none; }
+  .lista-canais { flex-direction: row; overflow-x: auto; scrollbar-width: none; }
+  .canal-botao { white-space: nowrap; font-size: 14px; padding: 6px 10px; }
+  .canal-nome { overflow: visible; }
+  .canal-membros, .canal-tempo { display: none; }
+  .acoes { flex-direction: row; }
+  .acoes button { flex: 1; }
+  .perfil { margin-top: 0; }
+  /* Durante a chamada, sobra mais espaço pro vídeo */
+  .em-chamada .acoes, .em-chamada .perfil { display: none; }
+  .topo-chamada { padding: 8px; gap: 8px; }
+  .participantes {
+    display: block; order: 3; flex-basis: 100%; font-size: 13px; color: var(--texto-suave);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+}
