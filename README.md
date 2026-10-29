@@ -2,29 +2,38 @@
 
 **Autor:** leocaetano7
 
-Site de chamada de vídeo e compartilhamento de tela que roda direto no **GitHub Pages**, sem servidor próprio.
-O vídeo, o áudio, a tela compartilhada e o chat da chamada são feitos pelo **JaaS (Jitsi as a Service) da 8x8**, o mesmo serviço do `8x8.vc`.
+Site de chamada de voz e compartilhamento de tela que roda direto no **GitHub Pages**, sem servidor próprio, sem conta e sem limite de uso.
+O áudio, a câmera e a tela vão **direto de um navegador para o outro (P2P, com WebRTC)**. O [PeerJS](https://peerjs.com) e o servidor gratuito dele (`0.peerjs.com`) só servem para as pessoas se encontrarem.
 
 ## Como funciona
 - Lista de canais de voz no estilo Discord: **Sala 1** até **Sala 10** (a quantidade fica em `TOTAL_SALAS`, no `client.js`). Basta clicar para entrar.
-- Embaixo do canal em que você está aparecem o tempo de chamada e quem está nela, com avatar, ícone de microfone mutado, ✋ de mão levantada e o selo **AO VIVO** para quem está compartilhando a tela.
+- Embaixo do canal em que você está aparecem o tempo de chamada e quem está nela, com avatar, **anel verde em quem está falando**, ícones de microfone mutado e câmera ligada, e o selo **AO VIVO** para quem está compartilhando a tela.
+- Na chamada, cada pessoa tem um bloco. Quem compartilha a tela ganha um bloco grande, e clicar num bloco com vídeo abre em tela cheia.
+- Botões embaixo: microfone, câmera, compartilhar tela (até 30 fps, com o som da aba ou do sistema quando o navegador permite) e sair.
 - **Convidar para voz** e **+ Criar sala** copiam o link de convite (a sala criada é `sala-xxxxxxxx`).
-- **Entrar com código** aceita o código, o link do site ou o link do 8x8.
-- Cada sala tem seu próprio link: `https://leocaetano7.github.io/Compartilhar-tela/#sala-1`.
+- **Entrar com código** aceita o código ou o link do site.
+- Cada sala tem seu próprio link: `https://leocaetano7.github.io/Compartilhar-tela/#sala-1`. Quem abre o link confirma o nome antes de entrar, porque o navegador só libera o som depois de um clique.
+- O nome fica salvo no navegador (`localStorage`).
+
+## Como as pessoas se encontram sem servidor
+Cada sala tem **8 lugares** com nome fixo no servidor do PeerJS (`nemesiscall-sala-1-0`, `nemesiscall-sala-1-1`...).
+Quem entra pega o primeiro lugar livre e se conecta com quem está nos lugares de número menor. Quem está nos lugares de número maior se conecta com ele.
+A cada 5 s cada um avisa que está vivo, tira da lista quem sumiu e procura gente nova.
+
+## Limites
+- **No máximo 8 pessoas por sala.** Cada pessoa manda o áudio e o vídeo direto para cada uma das outras, então quem compartilha a tela com muita gente gasta bastante internet de upload. Funciona melhor com até uns 5.
+- Algumas redes muito fechadas (de empresa ou de alguns celulares) bloqueiam a conexão direta. Nesses casos o PeerJS tenta passar pelo servidor de TURN gratuito dele, que não tem garantia.
 - Só dá para ver quem está na sala em que você entrou. As outras salas não mostram ninguém, porque isso precisaria de um servidor.
-- O nome que a pessoa digita fica salvo no navegador (`localStorage`).
-- Botão **Compartilhar tela** no topo, e até 30 fps na tela compartilhada.
-- No celular a chamada abre no próprio navegador, sem mandar baixar o app.
+- Não tem chat de texto.
+- Testado no Chrome. No celular dá para entrar, falar e ver a tela dos outros, mas os navegadores de celular não deixam compartilhar a tela.
 
 ## Arquivos
 | Arquivo | O que faz |
 |---|---|
 | `index.html` | Estrutura da página |
 | `style.css` | Visual (cores no estilo Discord, e um layout para celular) |
-| `client.js` | Canais, salas, convite e integração com o 8x8 |
+| `client.js` | Canais, salas, convite e a chamada P2P |
 | `.nojekyll` | Faz o GitHub Pages servir os arquivos sem processar com Jekyll |
-
-O `App ID` do JaaS fica no começo do `client.js` (`JAAS_APP_ID`). Para usar outra conta do 8x8, troque só ele.
 
 ## Publicando no GitHub Pages
 1. No repositório, vá em **Settings → Pages**.
@@ -45,10 +54,7 @@ python -m http.server 8080
 ```
 e abra `http://localhost:8080`.
 
-## Limites do plano grátis do JaaS
-- O plano **Dev** é grátis até **25 usuários ativos por mês**. Acima disso é preciso mudar de plano no painel [jaas.8x8.vc](https://jaas.8x8.vc).
-- O site entra nas salas **sem JWT** (token de login). Se aparecer "aguardando o moderador" ou pedido de autenticação, libere no painel do JaaS a opção de deixar participantes entrarem sem autenticação.
-- Sem JWT, ninguém é moderador, então não dá para gravar a chamada nem fazer transmissão. Para isso o JWT tem que ser assinado com a chave privada num servidor, e isso não pode ficar num site estático, senão a chave vaza.
+Para testar com mais de uma pessoa no mesmo computador, abra o link da sala numa janela anônima ou em outro navegador. As abas do mesmo navegador dividem o nome salvo.
 
 ## Versão antiga (C# + PostgreSQL)
 A versão com login, banco de dados e chat via SignalR não roda no GitHub Pages, que só serve arquivos estáticos.

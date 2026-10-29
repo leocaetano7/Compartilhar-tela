@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Nemesis call</title>
-  <meta name="description" content="Chamada de vídeo e compartilhamento de tela direto no navegador, sem instalar nada." />
+  <meta name="description" content="Chamada de voz e compartilhamento de tela direto no navegador, sem instalar nada." />
   <meta property="og:title" content="Nemesis call" />
   <meta property="og:description" content="Entre na chamada e compartilhe sua tela direto no navegador." />
   <meta name="theme-color" content="#2b2d31" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>" />
-  <link rel="preconnect" href="https://8x8.vc" />
+  <link rel="preconnect" href="https://0.peerjs.com" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -36,9 +36,7 @@
         <span id="nomeSalaAtual" class="nome-sala">Escolha um canal</span>
         <span id="listaParticipantes" class="participantes"></span>
         <div class="controles">
-          <button id="btnCompartilharTela" hidden>🖥️ Compartilhar tela</button>
           <button id="btnCopiarLink" hidden>🔗 Copiar convite</button>
-          <button id="btnSair" class="perigo" hidden>Sair</button>
         </div>
       </header>
 
@@ -48,9 +46,28 @@
         <p class="dica">Não precisa instalar nada nem criar conta.</p>
       </div>
 
-      <div id="meet" class="meet" hidden></div>
+      <div id="palco" class="palco" hidden></div>
+
+      <div id="barraControles" class="barra-controles" hidden>
+        <button id="btnMic" class="btn-redondo"></button>
+        <button id="btnCamera" class="btn-redondo"></button>
+        <button id="btnTela" class="btn-redondo"></button>
+        <button id="btnSair" class="btn-redondo perigo"></button>
+      </div>
     </main>
   </div>
+
+  <dialog id="dialogoEntrar" class="modal">
+    <form method="dialog">
+      <h3 id="tituloEntrar">Entrar na sala</h3>
+      <p>Como quer ser chamado?</p>
+      <input id="inputNomeEntrar" type="text" maxlength="40" required autocomplete="nickname" />
+      <div class="modal-botoes">
+        <button id="btnCancelarEntrar" type="button">Cancelar</button>
+        <button value="entrar" class="btn-principal">Entrar</button>
+      </div>
+    </form>
+  </dialog>
 
   <dialog id="dialogoCodigo" class="modal">
     <form method="dialog">
@@ -66,6 +83,7 @@
 
   <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
   <script src="client.js" defer></script>
 </body>
 </html>
